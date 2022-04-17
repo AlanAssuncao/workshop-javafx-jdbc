@@ -1,9 +1,11 @@
 package gui;
 
 import java.net.URL;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -133,7 +135,27 @@ public class SellerFormController implements Initializable {
 			exception.addError("name", "O campo não pode ser vazio");
 		}
 		obj.setName(txtName.getText());
+		
+		if (txtEmail.getText() == null || txtEmail.getText().trim().equals("")) {
+			exception.addError("email", "O campo não pode ser vazio");
+		}
+		obj.setEmail(txtEmail.getText());
+		
+		if(dpBirthDate.getValue() == null) {
+			exception.addError("birthDate", "O campo não pode ser vazio");
+		}
+		else {
+		Instant instant = Instant.from(dpBirthDate.getValue().atStartOfDay(ZoneId.systemDefault()));
+		obj.setBirthDate(Date.from(instant));
+		}
+		
+		if (txtSalary.getText() == null || txtSalary.getText().trim().equals("")) {
+			exception.addError("salary", "O campo não pode ser vazio");
+		}
+		obj.setSalary(Utils.tryParseToDouble(txtSalary.getText()));
 
+		obj.setDepartment(comboBoxDepartment.getValue());
+		
 		if (exception.getErrors().size() > 0) {
 			throw exception;
 		}
@@ -195,6 +217,30 @@ public class SellerFormController implements Initializable {
 
 		if (fields.contains("name")) {
 			labelErroName.setText(errors.get("name"));
+		}
+		else {
+			labelErroName.setText("");
+		}
+		
+		if (fields.contains("email")) {
+			labelErroEmail.setText(errors.get("email"));
+		}
+		else {
+			labelErroEmail.setText("");
+		}
+		
+		if (fields.contains("salary")) {
+			labelErroSalary.setText(errors.get("salary"));
+		}
+		else {
+			labelErroSalary.setText("");
+		}
+		
+		if (fields.contains("birthDate")) {
+			labelErroBirthDate.setText(errors.get("birthDate"));
+		}
+		else {
+			labelErroBirthDate.setText("");
 		}
 	}
 
